@@ -20,12 +20,10 @@ async def product_read_by_id(product_id: int, db: Session = Depends(get_db)):
 
 @router.post("/Create")
 async def product_create(product_data: ProductCreateSchema, db: Session = Depends(get_db)):
-    print(f"Updating product with data: {product_data}")
     ProductService.product_create(db, product_data)
     return {"message": "Product created successfully"}
 
 @router.put("/Update")
 async def product_update(product_data: ProductUpdateSchema, db: Session = Depends(get_db)):
-    print(f"Updating product with data: {product_data}")
     ProductService.product_update(db, product_data)
     return {"message": "Product updated successfully"}
