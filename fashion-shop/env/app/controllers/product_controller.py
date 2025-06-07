@@ -29,3 +29,30 @@ async def product_update(product_data: ProductUpdateSchema, db: Session = Depend
     print(f"Updating product with data: {product_data}")
     ProductService.product_update(db, product_data)
     return {"message": "Product updated successfully"}
+
+@router.delete("/Delete/{product_id}")
+async def product_delete(product_id: int, db: Session = Depends(get_db)):
+    try:
+        ProductService.product_delete(db, product_id)
+        return {"message": f"Product with ID '{product_id}' was deleted successfully."}
+    except ValueError as e:
+        logging.error(f"Error deleting product: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.get("/FilterByCategory/{category_id}")
+async def filter_by_category(category_id: int, db: Session = Depends(get_db)):
+    try:
+        products = ProductService.product_filter_by_category(db, category_id)
+        return products
+    except ValueError as e:
+        logging.error(f"Error filtering products: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.put("/Restore/{product_id}")
+async def product_restore(product_id: int, db: Session = Depends(get_db)):
+    try:
+        ProductService.product_restore(db, product_id)
+        return {"message": f"Product with ID '{product_id}' was restored successfully."}
+    except ValueError as e:
+        logging.error(f"Error restoring product: {e}")
+        raise HTTPException(status_code=400, detail=str(e))

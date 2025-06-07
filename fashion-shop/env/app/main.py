@@ -5,6 +5,7 @@ from app.controllers.order_controller import router as OrderRouter
 from app.controllers.customer_controller import router as CustomerRouter
 from app.controllers.staff_controller import router as StaffRouter
 from app.controllers.auth_controller import router as AuthRouter
+from app.controllers.category_controller import router as CategoryRouter
 from app.database import init_db
 
 # Initialize FastAPI app
@@ -26,6 +27,9 @@ app.include_router(StaffRouter)
 
 # Include customer controller routes
 app.include_router(AuthRouter)
+
+# Include customer controller routes
+app.include_router(CategoryRouter)
 
 # Add CORS middleware
 app.add_middleware(
