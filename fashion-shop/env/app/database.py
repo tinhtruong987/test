@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from sqlalchemy.sql import text
 
 # Load environment variables
-load_dotenv(dotenv_path="C:/Users/tinhk/Desktop/Full/fashion-shop/env/.env")
+load_dotenv(dotenv_path="H:/UIT/Python/DU AN/test/fashion-shop/env/.env")
 
 # Fetch DATABASE_URL from .env
 DATABASE_URL = os.getenv("DATABASE_URL")
