@@ -29,3 +29,11 @@ async def staff_update(staff_data: StaffUpdateSchema, db: Session = Depends(get_
     print(f"Updating staff with data: {staff_data}")
     staffService.staff_update(db, staff_data)
     return {"message": "Staff updated successfully"}
+
+@router.delete("/staff/{staff_id}")
+def delete_staff(staff_id: int, db: Session = Depends(get_db)):
+    try:
+        staffService.staff_delete(db, staff_id)
+        return {"message": "Staff deleted successfully"}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))

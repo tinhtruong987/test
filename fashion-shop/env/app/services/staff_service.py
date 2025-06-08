@@ -7,12 +7,12 @@ from app.views.staff_view import StaffCreateSchema, StaffUpdateSchema
 class staffService:
     @staticmethod
     def staff_get_all(db: Session):
-        query = text("EXEC staff_GetAll")
+        query = text("EXEC Staff_GetAll")
         result = db.execute(query).fetchall()
         return [
             {
-                "staffID": row.staffID,
-                "userAccountID": row.userAccountID,
+                "StaffID": row.StaffID,
+                "UserAccountID": row.UserAccountID,
                 "Name": row.Name,
                 "Position": row.Position,
                 "IsActive": row.IsActive,
@@ -24,9 +24,22 @@ class staffService:
 
     @staticmethod
     def staff_read_by_id(db: Session, staff_id: int):
-        query = text("EXEC staff_ReadByID :staffID")
-        result = db.execute(query, {"staffID": staff_id})
-        return result.fetchone()
+        query = text("EXEC Staff_ReadByID :StaffID")
+        result = db.execute(query, {"StaffID": staff_id}).mappings().fetchone()
+
+        if not result:
+            return None
+
+        return {
+            "staffID": result["StaffID"],
+            "userAccountID": result["UserAccountID"],
+            "name": result["Name"],
+            "position": result["Position"],
+            "isActive": result["IsActive"],
+            "createdAt": result["CreatedAt"],
+            "updatedAt": result["UpdatedAt"],
+        }
+
 
     @staticmethod
     def staff_create(db: Session, staff_data: StaffCreateSchema):
@@ -43,6 +56,7 @@ class staffService:
         )
         db.commit()
 
+
     @staticmethod
     def staff_update(db: Session, staff_data: StaffUpdateSchema):
         try:
@@ -56,10 +70,20 @@ class staffService:
                     "userAccountID": staff_data.userAccountID,
                     "Name": staff_data.Name,
                     "Position": staff_data.Position,
-                    "IsActive": staff_data.IsActive
+                    "IsActive": staff_data.IsActive,
                 },
             )
             db.commit()
         except Exception as e:
             db.rollback()
             raise ValueError(f"Failed to update staff: {str(e)}")
+
+    @staticmethod
+    def staff_delete(db: Session, staff_id: int):
+        try:
+            query = text("EXEC Staff_Delete :StaffID")
+            db.execute(query, {"StaffID": staff_id})
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            raise ValueError(f"Failed to delete staff: {str(e)}")
